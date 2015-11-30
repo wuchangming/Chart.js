@@ -41,7 +41,7 @@
 
 		// hardCode!!!!!!!
 		context.canvas.width = Chart.helpers.getMaximumWidth(context.canvas);
-
+		context.canvas.height = parseInt(Chart.helpers.getStyle(context.canvas, 'height'));
 
 		this.width = context.canvas.width || parseInt(Chart.helpers.getStyle(context.canvas, 'width')) || Chart.helpers.getMaximumWidth(context.canvas);
 		this.height = context.canvas.height || parseInt(Chart.helpers.getStyle(context.canvas, 'height')) || Chart.helpers.getMaximumHeight(context.canvas);

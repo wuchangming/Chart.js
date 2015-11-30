@@ -41,7 +41,7 @@
 
 		// hardCode!!!!!!!
 		context.canvas.width = Chart.helpers.getMaximumWidth(context.canvas);
-
+		context.canvas.height = parseInt(Chart.helpers.getStyle(context.canvas, 'height'));
 
 		this.width = context.canvas.width || parseInt(Chart.helpers.getStyle(context.canvas, 'width')) || Chart.helpers.getMaximumWidth(context.canvas);
 		this.height = context.canvas.height || parseInt(Chart.helpers.getStyle(context.canvas, 'height')) || Chart.helpers.getMaximumHeight(context.canvas);
@@ -1882,7 +1882,7 @@
 					var cosRotation = Math.cos(helpers.toRadians(this.labelRotation));
 					var sinRotation = Math.sin(helpers.toRadians(this.labelRotation));
 					this.paddingLeft = this.labelRotation !== 0 ? (cosRotation * firstLabelWidth) + 3 : firstLabelWidth / 2 + 3; // add 3 px to move away from canvas edges
-					this.paddingRight = lastLabelWidth / 2;
+					this.paddingRight = lastLabelWidth / 2 + 4;
 					// this.paddingRight = this.labelRotation !== 0 ? (sinRotation * (this.options.ticks.fontSize / 2)) + 3 : lastLabelWidth / 2 + 3; // when rotated
 				} else {
 					// A vertical axis is more constrained by the width. Labels are the dominant factor here, so get that length first
@@ -2014,7 +2014,7 @@
 					var canDisplay = Math.floor((this.width + (textWidth)) / (textWidth * 1.2));
 					// canDisplay++;
 					// var canDisplay = 4;
-					console.log(canDisplay);
+					// console.log(canDisplay);
 					canDisplay = Math.min(canDisplay, this.ticks.length);
 
 					var showTickStep = Math.ceil((this.ticks.length - 1) / (canDisplay - 1));
