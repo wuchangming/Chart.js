@@ -3,18 +3,17 @@
 
 <head>
     <title>Chart with xAxis Filtering</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <script src="../Chart.js"></script>
     <script src="../node_modules/jquery/dist/jquery.min.js"></script>
     <style>
-        canvas {
-            -webkit-box-shadow: 0 0 20px 0 rgba(0, 0, 0, .5);
-        }
+
     </style>
 </head>
 
-<body>
-    <div style="width:50%;">
-        <canvas id="canvas" style="width:100%;height:100%"></canvas>
+<body style="width:100%;display:absolute;margin:0px;">
+    <div style="width:100%;">
+        <canvas id="canvas" height="300px"></canvas>
     </div>
     <br>
     <br>
@@ -37,38 +36,62 @@
         var config = {
             type: 'line',
             data: {
-                labels: ["January is a long month", "February", "March", "April", "May", "June", "July"],
+                labels: ["2016/01/01", "2016/01/01", "2016/01/01", "2016/01/01", "2016/01/01", "2016/01/01", "2016/01/01",
+            "2016/01/01", "2016/01/01", "2016/01/01", "2016/01/01", "2016/01/01", "2016/01/01", "2016/01/01",
+        "2016/01/01", "2016/01/01", "2016/01/01", "2016/01/01", "2016/01/01", "2016/01/01", "2016/01/01",
+    "2016/01/01", "2016/01/01", "2016/01/01", "2016/01/01", "2016/01/01", "2016/01/01", "2016/01/01"],
                 datasets: [{
-                    label: "My First dataset",
-                    data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()],
-                    fill: false,
-                    borderDash: [5, 5],
-                }, {
                     label: "My Second dataset",
-                    data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()],
+                    data: [1.2002, 1.4002, 2.0002, 1.0302, 0.9002, 1.0002, 0.0802,
+                    1.2002, 1.4002, 2.0002, 1.0302, 0.9002, 1.0002, 0.0802,
+                1.2002, 1.4002, 2.0002, 1.0302, 0.9002, 1.0002, 0.0802,
+            1.2002, 1.4002, 2.0002, 1.0302, 0.9002, 1.0002, 0.0802],
                 }]
             },
             options: {
-                responsive: true,
+                elements :{
+                        line:{
+                            fill: false,
+                            borderWidth: 2,
+                            borderColor: 'rgb(234,85,12)'
+                        }
+                },
+                responsive: false,
                 scales: {
                     xAxes: [{
                         display: true,
                         ticks: {
-                            userCallback: function(dataLabel, index) {
-                                return index % 2 === 0 ? dataLabel : '';
-                            }
+                            // userCallback: function(dataLabel, index) {
+                            //     return index % 2 === 0 ? dataLabel : '';
+                            // },
+                            maxRotation: 0,
+                			minRotation: 0,
+                            fontSize: 13
                         }
                     }],
                     yAxes: [{
                         display: true,
-                        beginAtZero: false
+                        beginAtZero: false,
+                        ticks: {
+                            padding: 5,
+                            maxTicksLimit: 5,
+                            fontSize: 13,
+                            userCallback: function(dataLabel) {
+                                return parseFloat(dataLabel).toFixed(4);
+                            }
+                        }
                     }]
                 }
             }
         };
+        var length = Math.floor(Math.random() * config.data.labels.length);
+        console.log('length', length);
+        // length = 12
+        config.data.labels = config.data.labels.slice(0, length);
+        config.data.datasets[0].data = config.data.datasets[0].data.slice(0, length);
 
         $.each(config.data.datasets, function(i, dataset) {
-            dataset.borderColor = randomColor(0.4);
+            // dataset.borderColor = randomColor(0.4);
             dataset.backgroundColor = randomColor(0.5);
             dataset.pointBorderColor = randomColor(0.7);
             dataset.pointBackgroundColor = randomColor(0.5);

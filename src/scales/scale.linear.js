@@ -119,7 +119,7 @@
 
 			// Figure out what the max number of ticks we can support it is based on the size of
 			// the axis area. For now, we say that the minimum tick spacing in pixels must be 50
-			// We also limit the maximum number of ticks to 11 which gives a nice 10 squares on 
+			// We also limit the maximum number of ticks to 11 which gives a nice 10 squares on
 			// the graph
 
 			var maxTicks;
@@ -133,10 +133,10 @@
 				                    Math.ceil(this.height / (2 * this.options.ticks.fontSize)));
 			}
 
-			// Make sure we always have at least 2 ticks 
+			// Make sure we always have at least 2 ticks
 			maxTicks = Math.max(2, maxTicks);
 
-			// To get a "nice" value for the tick spacing, we will use the appropriately named 
+			// To get a "nice" value for the tick spacing, we will use the appropriately named
 			// "nice number" algorithm. See http://stackoverflow.com/questions/8506881/nice-label-algorithm-for-charts-with-minimum-ticks
 			// for details.
 
@@ -169,10 +169,14 @@
 				this.max++;
 			}
 
-			var niceRange = helpers.niceNum(this.max - this.min, false);
-			var spacing = helpers.niceNum(niceRange / (maxTicks - 1), true);
-			var niceMin = Math.floor(this.min / spacing) * spacing;
-			var niceMax = Math.ceil(this.max / spacing) * spacing;
+			// var niceRange = helpers.niceNum(this.max - this.min, false);
+			// var spacing = helpers.niceNum(niceRange / (maxTicks - 1), true);
+			// var niceMin = Math.floor(this.min / spacing) * spacing;
+			// var niceMax = Math.ceil(this.max / spacing) * spacing;
+			var niceRange = this.max - this.min;
+			var spacing = (niceRange / (maxTicks - 1)).toFixed(4);
+			var niceMin = this.min;
+			var niceMax = this.max;
 
 			var numSpaces = Math.ceil((niceMax - niceMin) / spacing);
 
@@ -210,7 +214,7 @@
 
 		// Utils
 		getPixelForValue: function(value, index, datasetIndex, includeOffset) {
-			// This must be called after fit has been run so that 
+			// This must be called after fit has been run so that
 			//      this.left, this.top, this.right, and this.bottom have been defined
 			var rightValue = +this.getRightValue(value);
 			var pixel;

@@ -17,7 +17,7 @@
 			drawTicks: true,
 			zeroLineWidth: 1,
 			zeroLineColor: "rgba(0,0,0,0.25)",
-			offsetGridLines: false,
+			offsetGridLines: false
 		},
 
 		// scale label
@@ -44,7 +44,7 @@
 			maxRotation: 90,
 			minRotation: 20,
 			mirror: false,
-			padding: 10,
+			// padding: 20,
 			reverse: false,
 			show: true,
 			callback: function(value) {
@@ -272,11 +272,12 @@
 					var lastLabelWidth = this.ctx.measureText(this.ticks[this.ticks.length - 1]).width;
 
 					// Ensure that our ticks are always inside the canvas. When rotated, ticks are right aligned which means that the right padding is dominated
-					// by the font height 
+					// by the font height
 					var cosRotation = Math.cos(helpers.toRadians(this.labelRotation));
 					var sinRotation = Math.sin(helpers.toRadians(this.labelRotation));
 					this.paddingLeft = this.labelRotation !== 0 ? (cosRotation * firstLabelWidth) + 3 : firstLabelWidth / 2 + 3; // add 3 px to move away from canvas edges
-					this.paddingRight = this.labelRotation !== 0 ? (sinRotation * (this.options.ticks.fontSize / 2)) + 3 : lastLabelWidth / 2 + 3; // when rotated
+					this.paddingRight = lastLabelWidth / 2;
+					// this.paddingRight = this.labelRotation !== 0 ? (sinRotation * (this.options.ticks.fontSize / 2)) + 3 : lastLabelWidth / 2 + 3; // when rotated
 				} else {
 					// A vertical axis is more constrained by the width. Labels are the dominant factor here, so get that length first
 					var maxLabelWidth = this.maxWidth - this.minSize.width;
@@ -349,7 +350,7 @@
 		// Used to get data value locations.  Value can either be an index or a numerical value
 		getPixelForValue: helpers.noop,
 
-		// Used for tick location, should 
+		// Used for tick location, should
 		getPixelForTick: function(index, includeOffset) {
 			if (this.isHorizontal()) {
 				var innerWidth = this.width - (this.paddingLeft + this.paddingRight);
@@ -384,7 +385,7 @@
 			if (this.options.display) {
 
 				var setContextLineSettings;
-				var isRotated = this.labelRotation !== 0;
+				var isRotated = false;
 				var skipRatio;
 				var scaleLabelX;
 				var scaleLabelY;
@@ -393,24 +394,47 @@
 				this.ctx.fillStyle = this.options.ticks.fontColor;
 				var labelFont = helpers.fontString(this.options.ticks.fontSize, this.options.ticks.fontStyle, this.options.ticks.fontFamily);
 
-				if (this.isHorizontal()) {
+				if (this.isHorizontal()) { // X 轴
 					setContextLineSettings = true;
-					var yTickStart = this.options.position == "bottom" ? this.top : this.bottom - 10;
-					var yTickEnd = this.options.position == "bottom" ? this.top + 10 : this.bottom;
+					var yTickStart = this.options.position == "bottom" ? this.top : this.bottom - 5;
+					var yTickEnd = this.options.position == "bottom" ? this.top + 5 : this.bottom;
 					skipRatio = false;
 
 					if ((this.options.ticks.fontSize + 4) * this.ticks.length > (this.width - (this.paddingLeft + this.paddingRight))) {
 						skipRatio = 1 + Math.floor(((this.options.ticks.fontSize + 4) * this.ticks.length) / (this.width - (this.paddingLeft + this.paddingRight)));
 					}
+					// 能展示的最多ticks数
+					var textWidth = this.ctx.measureText(this.ticks[0]).width;
+					var canDisplay = Math.floor((this.width + (textWidth)) / (textWidth * 1.2));
+					// canDisplay++;
+					// var canDisplay = 4;
+					console.log(canDisplay);
+					canDisplay = Math.min(canDisplay, this.ticks.length);
+
+					var showTickStep = Math.ceil((this.ticks.length - 1) / (canDisplay - 1));
 
 					helpers.each(this.ticks, function(label, index) {
-						// Blank ticks
-						if ((skipRatio > 1 && index % skipRatio > 0) || (label === undefined || label === null)) {
-							return;
-						}
-						var xLineValue = this.getPixelForTick(index); // xvalues for grid lines
-						var xLabelValue = this.getPixelForTick(index, this.options.gridLines.offsetGridLines); // x values for ticks (need to consider offsetLabel option)
 
+						// Blank ticks
+						// if ((skipRatio > 1 && index % skipRatio > 0) || (label === undefined || label === null)) {
+						// 	return;
+						// }
+						// 与X轴垂直的线
+						var xLineValue = this.getPixelForTick(index); // xvalues for grid lines
+						// X轴上的Label
+						// var xLabelValue = this.getPixelForTick(index, this.options.gridLines.offsetGridLines); // x values for ticks (need to consider offsetLabel option)
+						var xLabelValue = xLineValue;
+
+						//xLabelValue += (this.ticks.fontSize / 2);
+
+						var showLineFlag = (index % showTickStep) == 0;
+						var showLableFlag = showLineFlag;
+						// 是否最后一个Tick
+						if ( Math.ceil(index / showTickStep) >= canDisplay) {
+							if((this.left + this.width  - xLineValue) < (textWidth / 2)) {
+								showLableFlag = false;
+							}
+						}
 						if (this.options.gridLines.show) {
 							if (index === (typeof this.zeroLineIndex !== 'undefined' ? this.zeroLineIndex : 0)) {
 								// Draw the first index specially
@@ -428,13 +452,13 @@
 							// Draw the label area
 							this.ctx.beginPath();
 
-							if (this.options.gridLines.drawTicks) {
+							if (this.options.gridLines.drawTicks && showLableFlag) {
 								this.ctx.moveTo(xLineValue, yTickStart);
 								this.ctx.lineTo(xLineValue, yTickEnd);
 							}
-
+							var lastGridLine = (index === this.ticks.length - 1);
 							// Draw the chart area
-							if (this.options.gridLines.drawOnChartArea) {
+							if ((this.options.gridLines.drawOnChartArea  && showLineFlag) || lastGridLine) {
 								this.ctx.moveTo(xLineValue, chartArea.top);
 								this.ctx.lineTo(xLineValue, chartArea.bottom);
 							}
@@ -442,11 +466,10 @@
 							// Need to stroke in the loop because we are potentially changing line widths & colours
 							this.ctx.stroke();
 						}
-
-						if (this.options.ticks.show) {
+						if (this.options.ticks.show  && showLableFlag) {
 							this.ctx.save();
 							this.ctx.translate(xLabelValue, (isRotated) ? this.top + 12 : this.options.position === "top" ? this.bottom - 10 : this.top + 10);
-							this.ctx.rotate(helpers.toRadians(this.labelRotation) * -1);
+							// this.ctx.rotate(helpers.toRadians(this.labelRotation) * -1);
 							this.ctx.font = labelFont;
 							this.ctx.textAlign = (isRotated) ? "right" : "center";
 							this.ctx.textBaseline = (isRotated) ? "middle" : this.options.position === "top" ? "bottom" : "top";
@@ -455,7 +478,7 @@
 						}
 					}, this);
 
-					if (this.options.scaleLabel.show) {
+					if (this.options.scaleLabel.show && showLableFlag) {
 						// Draw the scale label
 						this.ctx.textAlign = "center";
 						this.ctx.textBaseline = 'middle';
@@ -468,7 +491,7 @@
 						this.ctx.fillText(this.options.scaleLabel.labelString, scaleLabelX, scaleLabelY);
 					}
 
-				} else {
+				} else {   // Y轴
 					setContextLineSettings = true;
 					var xTickStart = this.options.position == "right" ? this.left : this.right - 5;
 					var xTickEnd = this.options.position == "right" ? this.left + 5 : this.right;
@@ -498,10 +521,10 @@
 							// Draw the label area
 							this.ctx.beginPath();
 
-							if (this.options.gridLines.drawTicks) {
-								this.ctx.moveTo(xTickStart, yLineValue);
-								this.ctx.lineTo(xTickEnd, yLineValue);
-							}
+							// if (this.options.gridLines.drawTicks) {
+							// 	this.ctx.moveTo(xTickStart, yLineValue);
+							// 	this.ctx.lineTo(xTickEnd, yLineValue);
+							// }
 
 							// Draw the chart area
 							if (this.options.gridLines.drawOnChartArea) {

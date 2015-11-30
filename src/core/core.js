@@ -36,8 +36,13 @@
 
 		// Figure out what the size of the chart will be.
 		// If the canvas has a specified width and height, we use those else
-		// we look to see if the canvas node has a CSS width and height. 
+		// we look to see if the canvas node has a CSS width and height.
 		// If there is still no height, fill the parent container
+
+		// hardCode!!!!!!!
+		context.canvas.width = Chart.helpers.getMaximumWidth(context.canvas);
+
+
 		this.width = context.canvas.width || parseInt(Chart.helpers.getStyle(context.canvas, 'width')) || Chart.helpers.getMaximumWidth(context.canvas);
 		this.height = context.canvas.height || parseInt(Chart.helpers.getStyle(context.canvas, 'height')) || Chart.helpers.getMaximumHeight(context.canvas);
 

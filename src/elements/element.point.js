@@ -18,13 +18,13 @@
 		helpers = Chart.helpers;
 
 	Chart.defaults.global.elements.point = {
-		radius: 3,
+		radius: 0,
 		backgroundColor: Chart.defaults.global.defaultColor,
 		borderWidth: 1,
 		borderColor: Chart.defaults.global.defaultColor,
 		// Hover
-		hitRadius: 1,
-		hoverRadius: 4,
+		hitRadius: 0,
+		hoverRadius: 0,
 		hoverBorderWidth: 1,
 	};
 

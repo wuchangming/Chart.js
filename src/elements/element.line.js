@@ -34,19 +34,20 @@
 			var ctx = this._chart.ctx;
 
 			if (point._view.skip) {
-				skipHandler.call(this, previousPoint, point, nextPoint); 
+				skipHandler.call(this, previousPoint, point, nextPoint);
 			} else if (previousPoint._view.skip) {
 				previousSkipHandler.call(this, previousPoint, point, nextPoint);
 			} else {
 				// Line between points
-				ctx.bezierCurveTo(
-					previousPoint._view.controlPointNextX, 
-					previousPoint._view.controlPointNextY,
-					point._view.controlPointPreviousX,
-					point._view.controlPointPreviousY,
-					point._view.x,
-					point._view.y
-				);
+				// ctx.bezierCurveTo(
+				// 	previousPoint._view.controlPointNextX,
+				// 	previousPoint._view.controlPointNextY,
+				// 	point._view.controlPointPreviousX,
+				// 	point._view.controlPointPreviousY,
+				// 	point._view.x,
+				// 	point._view.y
+				// );
+				ctx.lineTo(point._view.x, point._view.y)
 			}
 		},
 
