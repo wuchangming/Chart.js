@@ -78,8 +78,8 @@ function buildTask() {
 
 
 	var headerComment = '/*Generated on:' + new Date() + ' \n' +
-	'many HARDCODE!!!! '+
-	'\n*/';
+	'many HARDCODE!!!! \n'+
+	'https://github.com/wuchangming/Chart.js/tree/v2.0-dev-line \n*/';
 	return gulp.src(srcFiles)
 		.pipe(concat('Chart.js'))
 		.pipe(replace('{{ version }}', package.version))
@@ -89,6 +89,7 @@ function buildTask() {
 		}))
 		.pipe(header(headerComment))
 		.pipe(concat('Chart.min.js'))
+		.pipe(gulp.dest(outputDir))
 		.pipe(concat('Chart.custom.min.js'))
 		.pipe(gulp.dest(outputDir));
 
