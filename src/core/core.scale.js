@@ -561,8 +561,8 @@
 								}
 							}
 
-
-							this.ctx.translate(xLabelValue, yLabelValue);
+							// Y轴的坐标加下移2px
+							this.ctx.translate(xLabelValue, yLabelValue + 2);
 							this.ctx.rotate(helpers.toRadians(this.labelRotation) * -1);
 							this.ctx.font = labelFont;
 							this.ctx.textBaseline = "middle";

@@ -7,7 +7,7 @@
 
 	// The scale service is used to resize charts along with all of their axes. We make this as
 	// a service where scales are registered with their respective charts so that changing the
-	// scales does not require 
+	// scales does not require
 	Chart.scaleService = {
 		// Scale registration object. Extensions can register new scale types (such as log or DB scales) and then
 		// use the new chart options to grab the correct scale
@@ -54,7 +54,7 @@
 
 				// Essentially we now have any number of scales on each of the 4 sides.
 				// Our canvas looks like the following.
-				// The areas L1 and L2 are the left axes. R1 is the right axis, T1 is the top axis and 
+				// The areas L1 and L2 are the left axes. R1 is the right axis, T1 is the top axis and
 				// B1 is the bottom axis
 				// |------------------------------------------------------|
 				// |          |             T1                      |     |
@@ -69,11 +69,11 @@
 				// |------------------------------------------------------|
 
 				// What we do to find the best sizing, we do the following
-				// 1. Determine the minimum size of the chart area. 
+				// 1. Determine the minimum size of the chart area.
 				// 2. Split the remaining width equally between each vertical axis
 				// 3. Split the remaining height equally between each horizontal axis
 				// 4. Give each scale the maximum size it can be. The scale will return it's minimum size
-				// 5. Adjust the sizes of each axis based on it's minimum reported size. 
+				// 5. Adjust the sizes of each axis based on it's minimum reported size.
 				// 6. Refit each axis
 				// 7. Position each axis in the final location
 				// 8. Tell the chart the final location of the chart area
@@ -274,7 +274,7 @@
 					maxChartWidth = newMaxChartWidth;
 				}
 
-				// Step 7 
+				// Step 7
 				// Position the scales
 				var left = xPadding;
 				var top = yPadding;
@@ -297,7 +297,7 @@
 					scaleInstance.top = top;
 					scaleInstance.bottom = top + scaleInstance.height;
 
-					// Move to next point 
+					// Move to next point
 					top = scaleInstance.bottom;
 				};
 
@@ -325,7 +325,7 @@
 					scaleInstance.top = chartInstance.chartArea.top;
 					scaleInstance.right = chartInstance.chartArea.right;
 					scaleInstance.bottom = chartInstance.chartArea.bottom;
-					
+
 					scaleInstance.update(maxChartWidth, maxChartHeight);
 				});
 			}
