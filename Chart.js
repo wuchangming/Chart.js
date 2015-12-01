@@ -927,6 +927,7 @@
 			return window.Color(color);
 		},
 		addResizeListener = helpers.addResizeListener = function(node, callback) {
+			return;
 			// Hide an iframe before the node
 			var hiddenIframe = document.createElement('iframe');
 			var hiddenIframeClass = 'chartjs-hidden-iframe';
