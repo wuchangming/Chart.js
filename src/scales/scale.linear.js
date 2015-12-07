@@ -178,7 +178,7 @@
 			var niceMin = this.min;
 			var niceMax = this.max;
 
-			var numSpaces = Math.ceil((niceMax - niceMin) / spacing);
+			var numSpaces = Math.round((niceMax - niceMin) / spacing);
 
 			// Put the values into the ticks array
 			for (var j = 0; j <= numSpaces; ++j) {
