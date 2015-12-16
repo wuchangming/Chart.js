@@ -2012,7 +2012,9 @@
 					}
 					// 能展示的最多ticks数
 					var textWidth = this.ctx.measureText(this.ticks[0]).width;
-					var canDisplay = Math.floor((this.width + (textWidth)) / (textWidth * 1.2));
+					// 总长度减去text占用的长度
+					var canDisplay = Math.floor((this.width + (textWidth)) / (textWidth * 1.4));
+
 					// canDisplay++;
 					// var canDisplay = 4;
 					// console.log(canDisplay);
