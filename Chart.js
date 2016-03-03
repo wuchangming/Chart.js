@@ -3747,7 +3747,7 @@
 			// var niceMax = Math.ceil(this.max / spacing) * spacing;
 			var niceRange = this.max - this.min;
 
-			var spacing = parseFloat((niceRange / (maxTicks - 1)).toFixed(5)).toFixed(4);
+			var spacing = Math.round((Math.round(niceRange / (maxTicks - 1) * 100000)/100000)*10000)/10000;
 			var niceMin = this.min;
 			var niceMax = this.max;
 
